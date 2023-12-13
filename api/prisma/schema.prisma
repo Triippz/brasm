@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum InstallationStatus {
+  INSTALLATION_IN_PROGRESS
+  ERROR
+  FINISHED
+}
+
+enum ServerType {
+  ARMA_REFORGER
+}
+
+enum ErrorStatus {
+  WRONG_AUTH
+  IO
+  TIMEOUT
+  NO_MATCH
+  NO_SUBSCRIPTION
+  RATE_LIMIT
+  GENERIC
+  INTERRUPTED
+}
+
+model User {
+  id        BigInt   @id @default(autoincrement())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  name      String?
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ReforgerServer {
+  // TODO: this can be a JSONB field probably
+  id                     BigInt                     @id @default(autoincrement())
+  dedicatedServerId      String
+  scenarioId             String
+  thirdPersonViewEnabled Boolean                    @default(true)
+  battlEye               Boolean                    @default(true)
+  serverId               BigInt
+  server                 Server                     @relation(fields: [serverId], references: [id])
+  activeMods             ReforgerServerActiveMods[]
+  createdAt              DateTime                   @default(now())
+  updatedAt              DateTime                   @updatedAt
+}
+
+model ReforgerServerActiveMods {
+  modId            String
+  name             String
+  version          String
+  reforgerServerId BigInt
+  reforgerServer   ReforgerServer @relation(fields: [reforgerServerId], references: [id])
+
+  @@id([reforgerServerId, modId])
+}
+
+model Server {
+  id              BigInt           @id @default(autoincrement())
+  type            ServerType
+  description     String?
+  name            String
+  port            Int
+  queryPort       Int
+  maxPlayers      Int
+  password        String?
+  adminPassword   String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  reforgerServers ReforgerServer[]
+}
+
+model ServerInstallation {
+  type               ServerType         @id
+  version            String?
+  lastUpdatedAt      DateTime
+  installationStatus InstallationStatus
+  errorStatus        ErrorStatus
+  createdAt          DateTime           @default(now())
+}
+
+model SteamAuth {
+  id              BigInt   @id @default(autoincrement())
+  username        String?
+  password        String?
+  steamGuardToken String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
