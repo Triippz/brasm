@@ -19,7 +19,11 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma migrate dev --name init"
+    "prisma:migrate": "prisma migrate dev --name init",
+    "create-super-user:dev": "ts-node ./cmd/main.ts create-super-user",
+    "create-super-user": "node ./dist/cmd/main.js create-super-user",
+    "change-password:dev": "ts-node ./cmd/main.ts change-password",
+    "change-password": "node ./dist/cmd/main.js change-password"
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.1",
@@ -38,6 +42,7 @@
     "class-validator": "^0.14.0",
     "crypto-random-string": "^3.3.1",
     "ip": "^1.1.8",
+    "nest-commander": "^3.12.5",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "prisma": "^5.7.0",
