@@ -1,28 +1,26 @@
 import { NestFactory } from '@nestjs/core';
-import {
-  NestFastifyApplication,
-  FastifyAdapter,
-} from '@nestjs/platform-fastify';
+
 import * as ip from 'ip';
 
 import { AppModule } from './app.module';
-import {Logger, ValidationPipe} from '@nestjs/common';
-import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { VALIDATION_PIPE_OPTIONS } from './auth/constants/header.constants';
+import { useContainer } from 'class-validator';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter(),
-  );
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-
+  const app = await NestFactory.create(AppModule, {
+    bodyParser: true,
+  });
+  app.useGlobalPipes(new ValidationPipe(VALIDATION_PIPE_OPTIONS));
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   const config = new DocumentBuilder()
-      .setTitle('Median')
-      .setDescription('The Median API description')
-      .setVersion('0.1')
-      .addBearerAuth()
-      .build();
+    .setTitle('Badland Raiders Server Manager')
+    .setDescription('The BRASM API description')
+    .setVersion('0.1')
+    .addBearerAuth()
+    .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
