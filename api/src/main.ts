@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-
+import './prototypes';
 import * as ip from 'ip';
 
 import { AppModule } from './app.module';

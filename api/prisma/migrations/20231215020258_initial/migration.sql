@@ -12,7 +12,7 @@ CREATE TYPE "ErrorStatus" AS ENUM ('WRONG_AUTH', 'IO', 'TIMEOUT', 'NO_MATCH', 'N
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
@@ -27,12 +27,12 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "ReforgerServer" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "dedicatedServerId" TEXT NOT NULL,
     "scenarioId" TEXT NOT NULL,
     "thirdPersonViewEnabled" BOOLEAN NOT NULL DEFAULT true,
     "battlEye" BOOLEAN NOT NULL DEFAULT true,
-    "serverId" BIGINT NOT NULL,
+    "serverId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -44,14 +44,14 @@ CREATE TABLE "ReforgerServerActiveMods" (
     "modId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "version" TEXT NOT NULL,
-    "reforgerServerId" BIGINT NOT NULL,
+    "reforgerServerId" INTEGER NOT NULL,
 
     CONSTRAINT "ReforgerServerActiveMods_pkey" PRIMARY KEY ("reforgerServerId","modId")
 );
 
 -- CreateTable
 CREATE TABLE "Server" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "type" "ServerType" NOT NULL,
     "description" TEXT,
     "name" TEXT NOT NULL,
@@ -68,19 +68,20 @@ CREATE TABLE "Server" (
 
 -- CreateTable
 CREATE TABLE "ServerInstallation" (
+    "id" SERIAL NOT NULL,
     "type" "ServerType" NOT NULL,
     "version" TEXT,
-    "lastUpdatedAt" TIMESTAMP(3) NOT NULL,
-    "installationStatus" "InstallationStatus" NOT NULL,
-    "errorStatus" "ErrorStatus" NOT NULL,
+    "lastUpdatedAt" TIMESTAMP(3),
+    "installationStatus" "InstallationStatus" NOT NULL DEFAULT 'INSTALLATION_IN_PROGRESS',
+    "errorStatus" "ErrorStatus" NOT NULL DEFAULT 'GENERIC',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "ServerInstallation_pkey" PRIMARY KEY ("type")
+    CONSTRAINT "ServerInstallation_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "SteamAuth" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "username" TEXT,
     "password" TEXT,
     "steamGuardToken" TEXT,

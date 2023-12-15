@@ -24,8 +24,19 @@ export type JWTConfig = {
   unusedRefreshTokenExpiryDays: number;
 };
 
+export interface ServerConfig {
+  steamcmd: {
+    path: string;
+  };
+  directory: {
+    servers: string;
+    logs: string;
+  };
+}
+
 export type AllConfigType = {
   app: AppConfig;
   database: DatabaseConfig;
   jwt: JWTConfig;
+  server: ServerConfig;
 };

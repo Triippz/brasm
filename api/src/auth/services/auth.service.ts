@@ -89,9 +89,9 @@ export class AuthService {
 
     const subject = { sub: user.id };
     const payload = {
-      email: user.role,
+      username: user.username,
       sub: user.id,
-      appRole: role,
+      role: role,
     };
 
     const authToken = {

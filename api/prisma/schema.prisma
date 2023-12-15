@@ -34,7 +34,7 @@ enum ErrorStatus {
 }
 
 model User {
-  id           BigInt   @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   username     String   @unique
   email        String   @unique
   password     String
@@ -47,12 +47,12 @@ model User {
 
 model ReforgerServer {
   // TODO: this can be a JSONB field probably
-  id                     BigInt                     @id @default(autoincrement())
+  id                     Int                        @id @default(autoincrement())
   dedicatedServerId      String
   scenarioId             String
   thirdPersonViewEnabled Boolean                    @default(true)
   battlEye               Boolean                    @default(true)
-  serverId               BigInt
+  serverId               Int
   server                 Server                     @relation(fields: [serverId], references: [id])
   activeMods             ReforgerServerActiveMods[]
   createdAt              DateTime                   @default(now())
@@ -63,14 +63,14 @@ model ReforgerServerActiveMods {
   modId            String
   name             String
   version          String
-  reforgerServerId BigInt
+  reforgerServerId Int
   reforgerServer   ReforgerServer @relation(fields: [reforgerServerId], references: [id])
 
   @@id([reforgerServerId, modId])
 }
 
 model Server {
-  id              BigInt           @id @default(autoincrement())
+  id              Int              @id @default(autoincrement())
   type            ServerType
   description     String?
   name            String
@@ -85,16 +85,17 @@ model Server {
 }
 
 model ServerInstallation {
-  type               ServerType         @id
+  id                 Int                @id @default(autoincrement())
+  type               ServerType
   version            String?
-  lastUpdatedAt      DateTime
-  installationStatus InstallationStatus
-  errorStatus        ErrorStatus
+  lastUpdatedAt      DateTime?
+  installationStatus InstallationStatus @default(INSTALLATION_IN_PROGRESS)
+  errorStatus        ErrorStatus?
   createdAt          DateTime           @default(now())
 }
 
 model SteamAuth {
-  id              BigInt   @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   username        String?
   password        String?
   steamGuardToken String?

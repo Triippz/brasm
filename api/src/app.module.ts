@@ -11,12 +11,18 @@ import { TokensModule } from './tokens/tokens.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { UserModule } from './users/user.module';
+import { SteamAuthModule } from './steam-auth/steam-auth.module';
+import { ServerManagementModule } from './server-management/server-management.module';
+import { ServerInstallModule } from './server-install/server-install.module';
+import { SteamCmdModule } from './steamcmd/steamcmd.module';
+import serverConfig from './config/server.config';
+import { ServersModule } from './servers/servers.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [databaseConfig, appConfig, jwtConfig],
+      load: [databaseConfig, appConfig, jwtConfig, serverConfig],
       envFilePath: ['.env'],
     }),
     HttpModule,
@@ -24,6 +30,11 @@ import { UserModule } from './users/user.module';
     SystemModule,
     TokensModule,
     UserModule,
+    SteamAuthModule,
+    ServerManagementModule,
+    ServerInstallModule,
+    SteamCmdModule,
+    ServersModule,
   ],
   controllers: [AppController],
   providers: [

@@ -19,11 +19,6 @@ export class JwtAuthGuard extends AuthGuard(STRATEGY_JWT_AUTH) {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const contextType = context.getType<'http' | 'stripe_webhook'>();
-
-    // Allow for bypass if this is a Stripe webhook event
-    if (contextType === 'stripe_webhook') return true;
-
     // Allow for bypass if public decorator is applied
     const decoratorSkip =
       this.reflector.get(BRASM_PUBLIC_ENDPOINT, context.getClass()) ||
