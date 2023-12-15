@@ -1,5 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+interface ServerInstanceInfoDtoProps {
+  alive: boolean;
+  id: number;
+  startedAt: Date | null;
+  playersOnline: number;
+  process: string | null;
+  version: string;
+}
+
 export class ServerInstanceInfoDto {
   @ApiProperty({ example: true })
   readonly alive: boolean;
@@ -21,4 +30,8 @@ export class ServerInstanceInfoDto {
 
   @ApiProperty({ example: 'A server description' })
   readonly description: string;
+
+  constructor(props?: ServerInstanceInfoDtoProps) {
+    this.alive;
+  }
 }

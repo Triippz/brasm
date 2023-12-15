@@ -17,6 +17,7 @@ import { ServerInstallModule } from './server-install/server-install.module';
 import { SteamCmdModule } from './steamcmd/steamcmd.module';
 import serverConfig from './config/server.config';
 import { ServersModule } from './servers/servers.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -24,6 +25,9 @@ import { ServersModule } from './servers/servers.module';
       isGlobal: true,
       load: [databaseConfig, appConfig, jwtConfig, serverConfig],
       envFilePath: ['.env'],
+    }),
+    CacheModule.register({
+      isGlobal: true,
     }),
     HttpModule,
     AuthModule,

@@ -4,6 +4,7 @@ import { ConfigFileService } from './config-file.service';
 import { ProcessFactory } from '../../common/process-factory';
 import { PathsFactory } from '../../common/paths-factory';
 import { ConfigService } from '@nestjs/config';
+import { Server } from '@prisma/client';
 
 @Injectable()
 export class ServerProcessService {
@@ -19,4 +20,20 @@ export class ServerProcessService {
   ) {
     this.logDir = this.configService.get<string>('server.directory.logs');
   }
+
+  async startServer(id: number): Promise<void> {
+    const server = await this.prismaService.server.findUnique({
+      where: { id },
+    });
+
+    if (!server) {
+      throw new Error(`Server with ID:${id} was not found`);
+    }
+
+    this.validatePortsNotTaken(server);
+
+    const instanceInfo = this.prismaService.serverInstallation;
+  }
+
+  validatePortsNotTaken(server: Server) {}
 }
